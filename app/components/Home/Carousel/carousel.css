@@ -1,0 +1,21 @@
+* {
+    --swiper-navigation-size: 20px;
+    --swiper-navigation-color: #2A2A2A;
+    --swiper-navigation-top-offset: calc(50% - 20px);
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    background-color: #fcb8ae;
+    padding: 20px;
+    border-radius: 100%;
+    opacity: 90%;
+}
+
+.swiper-button-prev {
+    padding-left: 18px;
+}
+
+.swiper-button-next {
+    padding-right: 18px;
+}
