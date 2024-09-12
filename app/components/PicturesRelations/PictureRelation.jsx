@@ -8,11 +8,15 @@ import ImageSVG from '@/public/assets/svgs/ImageSVG';
 const PictureRelation = ({ info }) => {
     const [animeData, setAnimeData] = useState(null);
 
-     // Effect to fetch anime data when info changes
+    // Effect to fetch anime data when info changes
     useEffect(() => {
         const fetchData = async () => {
-            const data = await GetAnimeFullById(info.mal_id);
-            setAnimeData(data.data);
+            try {
+                const data = await GetAnimeFullById(info.mal_id);
+                setAnimeData(data.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
         };
 
         fetchData();

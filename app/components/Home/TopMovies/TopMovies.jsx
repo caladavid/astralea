@@ -1,6 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import { GetTopMovies } from '@/app/actions';
+import React, { useContext, useEffect, useState } from 'react'
 import Wrapper from '../../Wrapper/Wrapper';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,27 +8,19 @@ import { useInView } from 'react-intersection-observer';
 
 import 'swiper/css/grid';
 import ImageSVG from '@/public/assets/svgs/ImageSVG';
+import { FetchDataContext } from '@/app/context/FetchDataContext';
 
 const TopMovies = () => {
-    const [TopMovies, setTopMovies] = useState([]);
+    const { TopMovies, fetchTopMovies } = useContext(FetchDataContext)
     const [visibleImages, setVisibleImages] = useState(1);
     const { ref, inView } = useInView({ threshold: 0 });
     const title = "top movies";
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (inView) {
-                    const TopMoviesResponse = await GetTopMovies();
-                    setTopMovies(TopMoviesResponse.data)
-                }
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+        if (inView) {
+            fetchTopMovies();
         }
-        fetchData();
-    }, [inView]);
+    }, [inView, fetchTopMovies]);
 
     useEffect(() => {
         const updateVisibleImages = () => {

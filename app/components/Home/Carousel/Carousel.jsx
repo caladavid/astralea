@@ -52,8 +52,7 @@ const Carousel = ({ slides, title, href }) => {
           View more
         </Link>
       </div>
-      <div className='flex items-center overflow-hidden cursor-grab' >
-
+      <div className='flex items-center justify-center overflow-hidden cursor-grab' >
         {slides.length === 0 ? (
           <div className='grid grid-cols-1 min-[580px]:grid-cols-2 min-[885px]:grid-cols-3 min-[1170px]:grid-cols-4 min-[1536px]:grid-cols-4 min-[1480px]:grid-cols-5 min-[1780px]:grid-cols-5 min-[2240px]:grid-cols-6 '>
             <AnimeCardSkeleton cards={visibleImages} />
@@ -61,7 +60,7 @@ const Carousel = ({ slides, title, href }) => {
         ) : (
           <Swiper
             breakpoints={{
-              320: { slidesPerView: 1, spaceBetween: 10 },
+              320: { slidesPerView: 1, spaceBetween: 10, centeredSlides: false, },
               580: { slidesPerView: 2, spaceBetween: 10 },
               885: { slidesPerView: 3, spaceBetween: 15 },
               1170: { slidesPerView: 4, spaceBetween: 20 },
@@ -75,7 +74,9 @@ const Carousel = ({ slides, title, href }) => {
           >
             {slides &&
               slides.map((anime, index) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide 
+                  className={`min-[350px]:px-[20%] min-[510px]:px-[25%] min-[580px]:px-0`}
+                  key={index} >
                   {anime &&
                     <AnimeCard anime={anime} />
                   }

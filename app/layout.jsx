@@ -3,6 +3,7 @@ import Header from './components/Header/Header'
 
 import { Roboto } from 'next/font/google'
 import Footer from './components/Footer/Footer'
+import { FetchDataProvider } from './context/FetchDataContext'
 
 const roboto = Roboto({
   weight: ['400', '700', '900'],
@@ -19,11 +20,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Header />
-        <main>
-          {children}
-        </main>
-        <Footer />
+        <FetchDataProvider>
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
+        </FetchDataProvider>
       </body>
     </html>
   )

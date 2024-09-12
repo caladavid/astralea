@@ -1,6 +1,6 @@
 "use client"
 import { GetAnimeSearch, GetGenres } from '@/app/actions';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Wrapper from '../components/Wrapper/Wrapper'
 import AnimeCard from '../components/Home/AnimeCard';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,9 +8,10 @@ import SelectCard from './SelectCard';
 import AnimeCardSkeleton from '../components/Skeletons/AnimeCardSkeleton';
 import SpinnerSVG from '@/public/assets/svgs/SpinnerSVG';
 import { useInView } from 'react-intersection-observer';
+import { FetchDataContext } from '../context/FetchDataContext';
 
 const Page = () => {
-    const [animeData, setAnimeData] = useState([]);
+    const { animeData, setAnimeData } = useContext(FetchDataContext)
     const [genreData, setGenreData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isLastPage, setIsLastPage] = useState(false);

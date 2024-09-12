@@ -1,22 +1,27 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import Wrapper from '../Wrapper/Wrapper'
-import { GetSeasonAnime, GetTopAnime, GetUpcomingAnime } from '@/app/actions';
 import Carousel from './Carousel/Carousel';
 import BroadcastAnime from './BroadcastAnime';
 import HeroText from './HeroText';
 import { useInView } from 'react-intersection-observer';
-
+import { FetchDataContext } from '@/app/context/FetchDataContext';
 
 function Hero() {
-  const [seasonAnime, setSeasonAnime] = useState([]);
-  const [popularAiringAnime, setPopularAiringAnime] = useState([]);
-  const [mostFavoriteAnime, setMostFavoriteAnime] = useState([]);
-  const [upcomingAnime, setUpcomingAnime] = useState([]);
-  const [seasonLoaded, setSeasonLoaded] = useState(false);
-  const [popularLoaded, setPopularLoaded] = useState(false);
-  const [favoriteLoaded, setFavoriteLoaded] = useState(false);
-  const [upcomingLoaded, setUpcomingLoaded] = useState(false);
+  const {
+    seasonAnime,
+    popularAiringAnime,
+    upcomingAnime,
+    mostFavoriteAnime,
+    fetchSeasonAnime,
+    fetchPopularAiringAnime,
+    fetchUpcomingAnime,
+    fetchMostFavoriteAnime,
+    seasonLoaded, 
+    popularLoaded, 
+    upcomingLoaded, 
+    favoriteLoaded
+  } = useContext(FetchDataContext)
 
   // Intersection Observer hooks for tracking scroll position
   const { ref: seasonRef, inView: seasonInView } = useInView({ initialInView: true });
@@ -24,34 +29,20 @@ function Hero() {
   const { ref: upcomingRef, inView: upcomingInView } = useInView();
   const { ref: favoriteRef, inView: favoriteInView } = useInView();
 
-   // Function to fetch data based on scroll position and state
+  // Function to fetch data based on scroll position and state
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (seasonInView && !seasonLoaded) {
-          const seasonData = await GetSeasonAnime();
-          setSeasonAnime(seasonData.data);
-          setSeasonLoaded(true);
-        } else if (popularInView && !popularLoaded) {
-          const popularData = await GetTopAnime("airing");
-          setPopularAiringAnime(popularData.data);
-          setPopularLoaded(true);
-        } else if (upcomingInView && !upcomingLoaded) {
-          const upcomingData = await GetUpcomingAnime();
-          setUpcomingAnime(upcomingData.data);
-          setUpcomingLoaded(true);
-        } else if (favoriteInView && !favoriteLoaded) {
-          const mostFavoriteData = await GetTopAnime("bypopularity");
-          setMostFavoriteAnime(mostFavoriteData.data);
-          setFavoriteLoaded(true);
-        }
-
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
+    if (seasonInView) {
+      fetchSeasonAnime();
+    }
+    if (popularInView) {
+      fetchPopularAiringAnime();
+    }
+    if (upcomingInView) {
+      fetchUpcomingAnime();
+    }
+    if (favoriteInView) {
+      fetchMostFavoriteAnime();
+    }
   }, [seasonInView, popularInView, upcomingInView, favoriteInView, seasonLoaded, popularLoaded, upcomingLoaded, favoriteLoaded]);
 
   return (
@@ -59,10 +50,10 @@ function Hero() {
       <Wrapper>
         <HeroText />
         <div ref={seasonRef}>
-          <Carousel slides={seasonAnime} title="currently airing" href="status=airing&type=tv&orderBy=popularity&sortBy=asc"/>
+          <Carousel slides={seasonAnime} title="currently airing" href="status=airing&type=tv&orderBy=popularity&sortBy=asc" />
         </div>
         <div ref={popularRef}>
-          <Carousel slides={popularAiringAnime}title="top airing" href="status=airing&type=tv&orderBy=score" />
+          <Carousel slides={popularAiringAnime} title="top airing" href="status=airing&type=tv&orderBy=score" />
         </div>
         <BroadcastAnime />
         <div ref={upcomingRef}>
