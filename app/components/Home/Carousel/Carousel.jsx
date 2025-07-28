@@ -14,6 +14,11 @@ import { useEffect, useState } from 'react';
 const Carousel = ({ slides, title, href }) => {
   const [visibleImages, setVisibleImages] = useState(1);
 
+  const uniqueSlides = slides.filter(
+    (slide, index, self) =>
+      index === self.findIndex(s => s.mal_id === slide.mal_id)
+  );
+
   useEffect(() => {
     const updateVisibleImages = () => {
       const screenWidth = window.innerWidth;
@@ -72,9 +77,9 @@ const Carousel = ({ slides, title, href }) => {
             modules={[Navigation]}
             navigation
           >
-            {slides &&
-              slides.map((anime, index) => (
-                <SwiperSlide 
+            {uniqueSlides &&
+              uniqueSlides.map((anime, index) => (
+                <SwiperSlide
                   className={`min-[350px]:px-[20%] min-[510px]:px-[25%] min-[580px]:px-0`}
                   key={index} >
                   {anime &&
